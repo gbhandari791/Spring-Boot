@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+			
+			<h2 th:if="${age} >= 18" >You are an adult</h2>
+			
+			<h2 th:unless="${age} >= 18" >You are not an adult</h2>
+			
+			<h1 th:text="${isActive} ? 'Active' : 'Inactive' "
+				th:style="${isActive} ? 'color: green;' : 'color: red;' "
+			 ></h1>
+			 
+			 <div th:switch="${role}" >
+			 	<h1 th:case="'Admin'" >Welcome Admin!</h1>
+			 	<h1 th:case="'User'" >Welcome User!</h1>
+			 	<h1 th:case="*" >Welcome Guest!</h1>
+			 </div>
+			
+</body>
+</html>

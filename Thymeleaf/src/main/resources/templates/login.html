@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.error-input{
+		border: 2px solid red;
+	}
+
+</style>
+</head>
+<body>
+		
+	
+	<form th:action="@{/processLogin}" th:object="${user}" method="post" >
+	
+	<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+        <ul style="color: red;" >
+            <li th:each="err : ${#fields.errors('*')}" 
+                th:text="${err}"></li>
+        </ul>
+    </div>
+	
+		<div style="margin: 20px;" >
+			<label>User Name: </label>
+			<input type="text" th:field="*{userName}" th:classappend="${#fields.hasErrors('userName')}? 'error-input' " >
+			<div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" style="color: red;" ></div>
+		</div>
+		
+		<div style="margin: 20px;">
+			<label>Password: </label>
+			<input type="text" th:field="*{password}" th:classappend="${#fields.hasErrors('password')}? 'error-input'"  >
+			<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;" ></div>
+		</div>
+		
+		<div style="margin: 20px;">
+			<button type="submit" >Submit</button>
+		</div>
+	
+	</form>
+	
+</body>
+</html>

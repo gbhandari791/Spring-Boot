@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>Thymeleaf</h1>
+
+	<h2>My name is <span th:text="${name}"></span></h2>
+	<h2>My age is <span th:text="${age}"></span></h2>
+	
+	<h2>My age is <span th:text="${ #strings.toUpperCase(age)  }"></span></h2>
+	
+	<div th:with="x= ${num1}, y= ${num2}">
+		<p th:text="${x}" ></p>
+		<p th:text="${y}" ></p>
+		<p th:text="${x + y}" ></p>
+	</div>
+
+</body>
+</html>

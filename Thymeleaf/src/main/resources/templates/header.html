@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<header id="my-header" th:fragment="header1" >
+		<nav>
+			<p>Home</p>
+			<p>About</p>
+			<p>Contact Us</p>
+		</nav>
+	</header>
+	
+	<header id="my-footer" th:fragment="footer(param1, param2)" >
+		<h1 th:text="${param1}" ></h1>
+		<h2 th:text="${param2}" ></h2>
+	</header>
+	
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>Fruits</h1>
+	<ul>
+		<li th:each="fruit: ${fruits}" th:text="${fruit}" />
+	</ul>
+	<hr>	
+	
+	<h1>Users</h1>
+	<div th:each="user: ${listUsers}" >
+		<p th:text="${user.id}" > </p>
+		<p th:text="${user.name}" > </p>
+		<hr>		
+	</div>
+	
+	<table border="1" >
+		<thead  >
+		<tr>
+			<th> Id </th>
+			<th> Name </th>
+			<th> Index </th>
+			<th> count </th>
+			<th> Is First </th>
+			<th> Is Last </th>
+			<th> Is Even </th>
+			<th> Is Odd </th>
+			<th> size </th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr  th:each="user, status: ${listUsers}" >
+			<td th:text="${user.id}" ></td>
+			<td th:text="${user.name}" ></td>
+			<td th:text="${status.index}" ></td>
+			<td th:text="${status.count}" ></td>
+			<td th:text="${status.first}" ></td>
+			<td th:text="${status.last}" ></td>
+			<td th:text="${status.even}" ></td>
+			<td th:text="${status.odd}" ></td>
+			<td th:text="${status.size}" ></td>
+		</tr>
+		</tbody>
+	</table>
+	
+</body>
+</html>

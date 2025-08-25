@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<p th:text="${#strings.toUpperCase(name)}"></p>
+	<p th:text="${#strings.length(name)}"></p>
+	
+	<p th:text="${#numbers.formatInteger(number, 3)}"></p>
+	<p th:text="${#numbers.formatPercent(nPercent, 1, 2)}"></p>
+	
+	<p th:text="${#dates.format(today, 'dd-MM-yyyy')}"></p>
+	
+	<p th:text="${#lists.size(listNumbers)}"></p>
+	<p th:text="${#lists.isEmpty(listNumbers)}"></p>
+
+	
+	
+</body>
+</html>

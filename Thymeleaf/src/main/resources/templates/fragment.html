@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+		
+		
+		<header  class="main-header" th:insert="header :: header1" ></header>
+		
+		<hr>
+		
+		<header class="main-header" th:replace="header :: header1" ></header>
+		
+		<hr>
+		
+		<header class="main-header" th:include="header :: header1" ></header>
+		
+		<h1>Lets Learn Fragment and it's Insertion</h1>
+		
+		
+		<footer th:replace="header :: footer(${dynamicFooter}, 'This footer passed from host  html page')" ></footer>
+
+
+
+</body>
+</html>
