@@ -7,7 +7,47 @@
 <body>
 
 	<section id="signup-contenet" >
-		<h1>This is Signup page</h1>
+		<div class="container" >
+			<div class="row" >
+				<div class="col-md-8 offset-md-2" >
+					<div id="registration-card" >
+						
+						<div class="d-flex justify-content-center" >
+							<img alt="img" th:src="@{img/customer-service.png}" width="80" >
+						</div>
+						<h1 class="text-center mb-3" >Register Here !!</h1>
+						
+						<form th:action="@{/do_register}" method="post" >
+						
+							<div class="form-group">
+							    <label for="id-username" class="font-weight-bold" >Your Name:</label>
+							    <input type="text" class="form-control" id="id-username" placeholder="Enter Your Name" required >
+							 </div>
+							 
+							 <div class="form-group">
+							    <label for="id-email" class="font-weight-bold" >Your Email:</label>
+							    <input type="email" class="form-control" id="id-email" placeholder="Enter Your Email" required >
+							 </div>
+							 
+							 <div class="form-group">
+							    <label for="id-password" class="font-weight-bold" >Your Password:</label>
+							    <input type="email" class="form-control" id="id-password" placeholder="Enter Your Password" required >
+							 </div>
+							 
+							 <div class="form-group">
+							    <textarea rows="4" cols="50" class="form-control" placeholder="Enter Something About Yourself"  ></textarea>
+							 </div>
+							 
+							 <div class="container text-center" >
+							 	<button type="submit" class="btn smart-bg-primary text-white" >Submit</button>
+							 	<button type="reset" class="btn bg-warning" >Reset</button>
+							 </div>
+							  
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 
 </body>
