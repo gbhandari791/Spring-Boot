@@ -25,4 +25,11 @@ public class HomeController {
 		
 		return "about";
 	}
+	
+	@GetMapping("/signup")
+	private String signUp() {
+		
+		
+		return "signup";
+	}
 }

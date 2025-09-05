@@ -14,11 +14,12 @@
 <title>Base Layout</title>
 
 <link rel="stylesheet" th:href="@{css/base.css}" >
+<link rel="stylesheet" th:href="@{/css/home.css}" >
 </head>
 <body>
 
 	<!--Navbar starts -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-dark smart-bg-primary">
 		
 		<a class="navbar-brand" href="#">Smart Contact Manager</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -31,7 +32,7 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav ml-auto text-uppercase">
 				
-				<li class="nav-item active"><a class="nav-link" href="#">Home
+				<li class="nav-item active"><a class="nav-link" th:href="@{/}" >Home
 						<span class="sr-only">(current)</span>
 				</a></li>
 				
@@ -40,7 +41,7 @@
 				<li class="nav-item"><a class="nav-link" href="#"
 					tabindex="-1" aria-disabled="true">Login</a></li>
 					
-				<li class="nav-item"><a class="nav-link" href="#"
+				<li class="nav-item"><a class="nav-link" th:href="@{/signup}"
 					tabindex="-1" aria-disabled="true">Signup</a></li>
 					
 			</ul>
