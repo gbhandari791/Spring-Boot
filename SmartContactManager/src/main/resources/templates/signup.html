@@ -11,31 +11,42 @@
 			<div class="row" >
 				<div class="col-md-8 offset-md-2" >
 					<div id="registration-card" >
+					
+						<div  th:if="${session.message}" th:classappend="${session.message.type}" class="alert" role="alert">
+  							<p th:text="${session.message.message}" >  </p>
+  							
+  							<th:block th:text="${#session.removeAttribute('message')}" ></th:block>
+						</div>
 						
 						<div class="d-flex justify-content-center" >
 							<img alt="img" th:src="@{img/customer-service.png}" width="80" >
 						</div>
 						<h1 class="text-center mb-3" >Register Here !!</h1>
 						
-						<form th:action="@{/do_register}" method="post" >
+						<form th:action="@{/do_register}" method="post" th:object="${user}" >
 						
 							<div class="form-group">
 							    <label for="id-username" class="font-weight-bold" >Your Name:</label>
-							    <input type="text" class="form-control" id="id-username" placeholder="Enter Your Name" required >
+							    <input type="text" name="name" th:value="${user.name}" class="form-control" id="id-username" placeholder="Enter Your Name" required >
 							 </div>
 							 
 							 <div class="form-group">
 							    <label for="id-email" class="font-weight-bold" >Your Email:</label>
-							    <input type="email" class="form-control" id="id-email" placeholder="Enter Your Email" required >
+							    <input type="email" name="email" th:value="${user.email}" class="form-control" id="id-email" placeholder="Enter Your Email" required >
 							 </div>
 							 
 							 <div class="form-group">
 							    <label for="id-password" class="font-weight-bold" >Your Password:</label>
-							    <input type="email" class="form-control" id="id-password" placeholder="Enter Your Password" required >
+							    <input type="password" name="password" class="form-control" id="id-password" placeholder="Enter Your Password" required >
 							 </div>
 							 
 							 <div class="form-group">
-							    <textarea rows="4" cols="50" class="form-control" placeholder="Enter Something About Yourself"  ></textarea>
+							    <textarea rows="4" name="about" th:value="${user.about}" cols="50" class="form-control" placeholder="Enter Something About Yourself"  ></textarea>
+							 </div>
+							 
+							 <div class="form-group form-ckeck text-center">
+							    <input type="checkbox" class="form-check-input" id="agreement" name="agreement" >
+							    <label for="agreement" class="font-weight-bold" >Accept terms and conditions</label>
 							 </div>
 							 
 							 <div class="container text-center" >
