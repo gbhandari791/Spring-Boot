@@ -3,6 +3,7 @@ package com.smart.contact.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import com.smart.contact.entities.User;
 import com.smart.contact.mapper.UserMapper;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
@@ -47,15 +49,16 @@ public class HomeController {
 	}
 	
 	@PostMapping("/do_register")
-	public String registerUser(@ModelAttribute("user") UserDTO dto,
-			@RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
+	public String registerUser(@Valid @ModelAttribute("user") UserDTO dto, BindingResult result,
+			Model model, HttpSession session) {
 
 		try {
-			if (!agreement) {
-				model.addAttribute("message", new ResponceMessageDTO("You have not agreed the terms and condtions", ResponceTypeConstant.TYPE_ALERT));
+			
+			if(result.hasErrors()) {
+				model.addAttribute("user", dto);
 				return "signup";
 			}
-
+			
 			dto.setRole("ROLE_USER");
 			dto.setEnabled(true);
 
