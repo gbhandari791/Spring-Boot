@@ -12,10 +12,8 @@
 				<div class="col-md-8 offset-md-2" >
 					<div id="registration-card" >
 					
-						<div  th:if="${session.message}" th:classappend="${session.message.type}" class="alert" role="alert">
-  							<p th:text="${session.message.message}" >  </p>
-  							
-  							<th:block th:text="${#session.removeAttribute('message')}" ></th:block>
+						<div  th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+  							<p th:text="${message.message}" >  </p>
 						</div>
 						
 						<div class="d-flex justify-content-center" >

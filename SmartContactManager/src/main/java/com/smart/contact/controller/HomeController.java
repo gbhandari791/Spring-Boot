@@ -52,7 +52,8 @@ public class HomeController {
 
 		try {
 			if (!agreement) {
-				throw new Exception("You have not agreed the terms and condtions");
+				model.addAttribute("message", new ResponceMessageDTO("You have not agreed the terms and condtions", ResponceTypeConstant.TYPE_ALERT));
+				return "signup";
 			}
 
 			dto.setRole("ROLE_USER");
@@ -61,12 +62,12 @@ public class HomeController {
 			User userEntity = this.userMapper.toUserEntity(dto);
 			this.userRepository.save(userEntity);
 			model.addAttribute("user", new UserDTO());
-			session.setAttribute("message", new ResponceMessageDTO("Successfully Registered !!", ResponceTypeConstant.TYPE_SUCCESS));
+			model.addAttribute("message", new ResponceMessageDTO("Successfully Registered !!", ResponceTypeConstant.TYPE_SUCCESS));
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("user", dto);
-			session.setAttribute("message", new ResponceMessageDTO("Something went wrong : " + e, ResponceTypeConstant.TYPE_ALERT));
+			model.addAttribute("message", new ResponceMessageDTO("Something went wrong : " + e, ResponceTypeConstant.TYPE_ALERT));
 
 		}
 		return "signup";
