@@ -1,0 +1,9 @@
+#login-card{
+	padding: 40px 50px 22px 50px;
+	background: #ffffff; 
+	border-radius: 10px;
+}
+
+.smart-check-invalid{
+	border-color: red;
+}

@@ -1,13 +1,13 @@
 package com.smart.contact.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smart.contact.constant.ResponceTypeConstant;
 import com.smart.contact.dao.UserRepository;
@@ -25,7 +25,9 @@ public class HomeController {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private UserMapper userMapper;
+	private UserMapper userMapper;	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@GetMapping("/")
 	public String home() {
@@ -61,6 +63,7 @@ public class HomeController {
 			
 			dto.setRole("ROLE_USER");
 			dto.setEnabled(true);
+			dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
 			User userEntity = this.userMapper.toUserEntity(dto);
 			this.userRepository.save(userEntity);
@@ -74,6 +77,12 @@ public class HomeController {
 
 		}
 		return "signup";
+	}
+	
+	@GetMapping("/signin")
+	public String login() {
+		
+		return "login";
 	}
 	
 }
