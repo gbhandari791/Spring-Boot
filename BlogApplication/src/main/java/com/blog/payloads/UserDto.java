@@ -15,7 +15,8 @@ public class UserDto {
 	private String email;	
 	private String password;	
 	private String about;	
-	private String createdOn;	
+	private Long createdOn;	
 	private boolean isDeleted;	
-	private String deletedOn;
+	private Long deletedOn;
+	private Long updatedOn;
 }

@@ -37,12 +37,15 @@ public class User {
 	private String about;
 	
 	@Column(name = "created_on")
-	private String createdOn;
+	private Long createdOn;
+	
+	@Column(name = "updated_on")
+	private Long updatedOn;
 	
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
 	
 	@Column(name = "deleted_on")
-	private String deletedOn;
+	private Long deletedOn;
 	
 }
