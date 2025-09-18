@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService {
 		user.setAbout(userDto.getAbout());
 		user.setUpdatedOn(System.currentTimeMillis());
 
-		this.userRepo.save(user);
+		User uUser = this.userRepo.save(user);
 
-		return userMapper.entityToDto(user);
+		return userMapper.entityToDto(uUser);
 	}
 
 	@Override
