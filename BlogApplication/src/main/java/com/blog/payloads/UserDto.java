@@ -2,8 +2,6 @@ package com.blog.payloads;
 
 import com.blog.validation.annotation.StrongPassword;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -31,9 +29,6 @@ public class UserDto {
 	private String about;	
 	@JsonIgnore
 	private Long createdOn;	
-	private boolean isDeleted;	
-	@JsonInclude(Include.NON_EMPTY)
-	private Long deletedOn;
 	@JsonIgnore
 	private Long updatedOn;
 }

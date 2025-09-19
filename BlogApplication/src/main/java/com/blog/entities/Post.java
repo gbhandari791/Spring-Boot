@@ -23,17 +23,14 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String tital;
+	@Column(columnDefinition = "TEXT")
 	private String content;
 	@Column(name = "image_name")
 	private String imageName;
 	@Column(name = "created_on")
-	private String createdOn;
+	private long createdOn;
 	@Column(name = "updated_on")
-	private String updatedOn;
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
-	@Column(name = "deleted_on")
-	private String deletedOn;
+	private long updatedOn;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")

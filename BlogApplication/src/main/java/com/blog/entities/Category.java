@@ -2,6 +2,9 @@ package com.blog.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +32,10 @@ public class Category {
 	private Integer id;
 	private String tital;
 	private String description;
+	@Column(name = "created_on")
+	private long createdOn;
+	@Column(name = "updated_on")
+	private long updatedOn;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> posts;

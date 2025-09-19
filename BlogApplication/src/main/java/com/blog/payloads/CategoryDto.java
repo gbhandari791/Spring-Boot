@@ -1,5 +1,7 @@
 package com.blog.payloads;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +16,8 @@ public class CategoryDto {
 	@NotBlank(message = "Tital is required")
 	private String tital;
 	private String description;
+	@JsonIgnore
+	private long createdOn;
+	@JsonIgnore
+	private long updatedOn;
 }

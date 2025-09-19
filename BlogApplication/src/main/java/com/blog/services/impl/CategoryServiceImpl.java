@@ -26,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDto createCategory(CategoryDto categoryDto) {
 		
 		Category cat = this.categoryMapper.dtoToEntity(categoryDto);
+		cat.setCreatedOn(System.currentTimeMillis());
 		Category savedcat = this.categoryRepo.save(cat);
 		return this.categoryMapper.entityToDto(savedcat);
 	}
@@ -37,6 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 				.orElseThrow( () -> new ResourceNotFoundException("Category", "Id", id));
 		cat.setTital(categoryDto.getTital());
 		cat.setDescription(categoryDto.getDescription());
+		cat.setUpdatedOn(System.currentTimeMillis());
 		Category uCat = this.categoryRepo.save(cat);
 		return this.categoryMapper.entityToDto(uCat);
 	}

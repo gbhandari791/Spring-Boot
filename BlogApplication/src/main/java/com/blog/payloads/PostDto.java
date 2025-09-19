@@ -2,7 +2,9 @@ package com.blog.payloads;
 
 import com.blog.entities.Category;
 import com.blog.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,15 +15,16 @@ import lombok.Setter;
 public class PostDto {
 
 	private Integer id;
+	@NotBlank(message = "Tital is required")
 	private String tital;
 	private String content;
 	private String imageName;
-	private String createdOn;
-	private String updatedOn;
-	private boolean isDeleted;
-	private String deletedOn;
+	@JsonIgnore
+	private long createdOn;
+	@JsonIgnore
+	private long updatedOn;
 	
-	private User user;
+	private UserDto user;
 	
-	private Category category;
+	private CategoryDto category;
 }
