@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,4 +23,17 @@ public class GlobalExceptionHandler {
 		
 		return ResponseEntity.badRequest().body(errors);
 	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<Map<String, String>> handleValidationError(ConstraintViolationException ex) {
+		
+		Map<String, String> errors = new HashMap<>();
+		ex.getConstraintViolations().forEach(error -> {
+			String field = error.getPropertyPath().toString();
+			String message = error.getMessage();
+			errors.put(field, message);
+		});
+		
+		return ResponseEntity.badRequest().body(errors);
+	} 
 }

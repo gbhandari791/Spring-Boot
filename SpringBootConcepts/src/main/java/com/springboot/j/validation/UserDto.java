@@ -20,6 +20,13 @@ public class UserDto {
 
     @Min(value = 18, message = "Age must be at least 18")
     private int age;
+    
+    private String role;
+    
+    private String about;
+    
+    @StrongPassword
+    private String password;
 
 	public Integer getId() {
 		return id;
@@ -52,5 +59,28 @@ public class UserDto {
 	public void setAge(int age) {
 		this.age = age;
 	}
-    
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}    
 }
