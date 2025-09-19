@@ -1,6 +1,8 @@
 package com.blog.services.impl;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,19 +60,46 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostDto getPost(Integer postId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+		return this.postMapper.entityToDto(post);
 	}
 
 	@Override
 	public List<PostDto> getAllPosts() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Post> posts = this.postRepo.findAll();
+		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
+		return postDtos;
 	}
 
 	@Override
+	public List<PostDto> getPostByUser(Integer userId) {
+		
+		User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+		List<Post> posts = postRepo.findByUser(user);
+		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
+		return postDtos;
+	}
+
+	@Override
+	public List<PostDto> getPostByCategory(Integer categoryId) {
+		
+		Category cat = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+		
+		List<Post> posts = postRepo.findByCategory(cat);
+		
+		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
+		
+		
+		return postDtos;
+	}
+	
+	@Override
 	public void deletePost(Integer postId) {
-		// TODO Auto-generated method stub
+		
+		Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+		postRepo.delete(post);
 		
 	}
 

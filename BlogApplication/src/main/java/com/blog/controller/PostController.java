@@ -1,7 +1,11 @@
 package com.blog.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.payloads.PostDto;
+import com.blog.payloads.ResponseDto;
 import com.blog.services.PostService;
 
 import jakarta.validation.Valid;
@@ -28,5 +33,40 @@ public class PostController {
 		
 		return ResponseEntity.ok(post);
 		
+	}
+	
+	@GetMapping("/post/{postId}")
+	public ResponseEntity<PostDto> getPost(@PathVariable Integer postId){
+		
+		PostDto post = postService.getPost(postId);
+		return ResponseEntity.ok(post);
+	}
+	
+	@GetMapping("/user/{userId}/post")
+	public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable Integer userId){
+		
+		List<PostDto> posts = postService.getPostByUser(userId);
+		return ResponseEntity.ok(posts);
+	}
+	
+	@GetMapping("/category/{catId}/post")
+	public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable Integer catId){
+		
+		List<PostDto> posts = postService.getPostByCategory(catId);
+		return ResponseEntity.ok(posts);
+	}
+	
+	@GetMapping("/post")
+	public ResponseEntity<List<PostDto>> getAllPosts(){
+		
+		List<PostDto> posts = postService.getAllPosts();
+		return ResponseEntity.ok(posts);
+	}
+	
+	@DeleteMapping("/post/{postId}")
+	public ResponseEntity<ResponseDto> deletePost(@PathVariable Integer postId){
+		
+		postService.deletePost(postId);
+		return ResponseEntity.ok(new ResponseDto("Post deleted successfully", true));
 	}
 }
