@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Service;
 
 import com.blog.entities.Category;
@@ -20,6 +19,7 @@ import com.blog.exceptions.CustomException;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.mapper.PostMapper;
 import com.blog.payloads.PostDto;
+import com.blog.payloads.PageDto;
 import com.blog.payloads.PagedResponse;
 import com.blog.repositories.CategoryRepository;
 import com.blog.repositories.PostRepository;
@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private PostMapper postMapper;
 	
-	Set<String> ALLOWED_SORTED_FIELDS = Set.of("tital", "createdOn");
+	Set<String> ALLOWED_SORTED_FIELDS = Set.of("id", "tital", "createdOn");
 	
 	@Override
 	public PostDto createPost(PostDto dto, Integer userId, Integer categoryId) {
@@ -86,16 +86,10 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PagedResponse<PostDto> getAllPosts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
+	public PagedResponse<PostDto> getAllPosts(PageDto page) {
 		
-		if(!ALLOWED_SORTED_FIELDS.contains(sortOrder)) {
-			throw new CustomException("Invalid sort field : " + sortBy);
-		}
-		
-		Sort sort = "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-		
-		Pageable page = PageRequest.of(pageNumber, pageSize, sort);
-		Page<Post> postPage = this.postRepo.findAll(page);
+		Pageable pageAble = getPageable(page);
+		Page<Post> postPage = this.postRepo.findAll(pageAble);
 		List<Post> posts = postPage.getContent();
 		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
 		
@@ -103,27 +97,27 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PagedResponse<PostDto> getPostByUser(Integer userId, int pageNumber, int pageSize) {
+	public PagedResponse<PostDto> getPostByUser(Integer userId, PageDto page) {
 						
 		User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 		
-		Pageable pageAble = PageRequest.of(pageNumber, pageSize);		
+		Pageable pageAble = getPageable(page);	
 		Page<Post> postPage = postRepo.findByUser(user, pageAble);
 		List<Post> posts = postPage.getContent();
-		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
+		List<PostDto> postDtos = getPostDtoList(posts);
 		
 		return GeneralUtil.createPagedResponse(postDtos, postPage);
 	}
 
 	@Override
-	public PagedResponse<PostDto> getPostByCategory(Integer categoryId, int pageNumber, int pageSize) {
+	public PagedResponse<PostDto> getPostByCategory(Integer categoryId, PageDto page) {
 		
 		Category cat = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
 		
-		Pageable page = PageRequest.of(pageNumber, pageSize);		
-		Page<Post> postPage = postRepo.findByCategory(cat, page);
+		Pageable pageAble = getPageable(page);		
+		Page<Post> postPage = postRepo.findByCategory(cat, pageAble);
 		List<Post> posts = postPage.getContent();		
-		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
+		List<PostDto> postDtos = getPostDtoList(posts);
 		
 		return GeneralUtil.createPagedResponse(postDtos, postPage);
 	}
@@ -135,6 +129,32 @@ public class PostServiceImpl implements PostService {
 		postRepo.delete(post);
 		
 	}
+
+	@Override
+	public PagedResponse<PostDto> searchByTital(String search, PageDto page) {
+		
+		Pageable pageAble = getPageable(page);
+		search = search != null ? search.trim() : "";
+		Page<Post> postPage = this.postRepo.findByTitalContainingIgnoreCase(search, pageAble);
+		List<PostDto> postDtoList = getPostDtoList(postPage.getContent());
+		return GeneralUtil.createPagedResponse(postDtoList, postPage);
+	}
 	
+	private Pageable getPageable(PageDto page) {
+		Sort sort = getSort(page.getSortBy(), page.getSortOrder());
+		return PageRequest.of(page.getPage() -1 , page.getSize(), sort);
+	}
+	private Sort getSort(String sortBy, String sortOrder) {
+		sortBy =  sortBy != null ? sortBy.toLowerCase() : "";
+		if(!ALLOWED_SORTED_FIELDS.contains(sortBy)) {
+			throw new CustomException("Invalid sort field : " + sortBy);
+		}
+		
+		return "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+	}
+	private List<PostDto> getPostDtoList(List<Post> posts){
+		
+		return posts.stream().map(post -> this.postMapper.entityToDto(post)).collect(Collectors.toList());
+	}
 	
 }

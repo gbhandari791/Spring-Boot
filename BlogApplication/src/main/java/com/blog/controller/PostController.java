@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.payloads.PostDto;
+import com.blog.payloads.PageDto;
 import com.blog.payloads.PagedResponse;
 import com.blog.payloads.ResponseDto;
 import com.blog.services.PostService;
@@ -53,30 +54,30 @@ public class PostController {
 	}
 	
 	@GetMapping("/user/{userId}/post")
-	public ResponseEntity<PagedResponse<PostDto>> getPostByUser(@PathVariable Integer userId, 
-			@RequestParam(name = "page", defaultValue = "1") int pageNumber,
-			@RequestParam(name = "size", defaultValue = "5") Integer pageSize){
+	public ResponseEntity<PagedResponse<PostDto>> getPostByUser(@PathVariable Integer userId, PageDto page){
 		
-		PagedResponse<PostDto> posts = postService.getPostByUser(userId, pageNumber - 1, pageSize);
+		PagedResponse<PostDto> posts = postService.getPostByUser(userId, page);
 		return ResponseEntity.ok(posts);
 	}
 	
 	@GetMapping("/category/{catId}/post")
-	public ResponseEntity<PagedResponse<PostDto>> getPostByCategory(@PathVariable Integer catId, 
-			@RequestParam(name = "page", defaultValue = "1") int pageNumber,
-			@RequestParam(name = "size", defaultValue = "5") Integer pageSize){
+	public ResponseEntity<PagedResponse<PostDto>> getPostByCategory(@PathVariable Integer catId, PageDto page){
 		
-		PagedResponse<PostDto> posts = postService.getPostByCategory(catId, pageNumber - 1, pageSize);
+		PagedResponse<PostDto> posts = postService.getPostByCategory(catId, page);
 		return ResponseEntity.ok(posts);
 	}
 	
 	@GetMapping("/post")
-	public ResponseEntity<PagedResponse<PostDto>> getAllPosts(@RequestParam(name = "page", defaultValue = "1") int pageNumber,
-			@RequestParam(name = "size", defaultValue = "5") Integer pageSize,
-			@RequestParam(name = "sortBy", defaultValue = "id") String sortBy, 
-			@RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder) {
+	public ResponseEntity<PagedResponse<PostDto>> getAllPosts(PageDto page) {
 
-		PagedResponse<PostDto> posts = postService.getAllPosts(pageNumber -1 , pageSize, sortBy, sortOrder);
+		PagedResponse<PostDto> posts = postService.getAllPosts(page);
+		return ResponseEntity.ok(posts);
+	}
+	
+	@GetMapping("/post/search/{search}")
+	public ResponseEntity<PagedResponse<PostDto>> searchPost(@PathVariable String search, PageDto page){
+		
+		PagedResponse<PostDto> posts = this.postService.searchByTital(search, page);
 		return ResponseEntity.ok(posts);
 	}
 	
