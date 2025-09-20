@@ -5,6 +5,10 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Service;
 
 import com.blog.entities.Category;
@@ -13,10 +17,12 @@ import com.blog.entities.User;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.mapper.PostMapper;
 import com.blog.payloads.PostDto;
+import com.blog.payloads.PagedResponse;
 import com.blog.repositories.CategoryRepository;
 import com.blog.repositories.PostRepository;
 import com.blog.repositories.UserRepository;
 import com.blog.services.PostService;
+import com.blog.util.GeneralUtil;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -75,33 +81,40 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDto> getAllPosts() {
+	public PagedResponse<PostDto> getAllPosts(int pageNumber, int pageSize) {
 		
-		List<Post> posts = this.postRepo.findAll();
+		Pageable page = PageRequest.of(pageNumber, pageSize);
+		Page<Post> postPage = this.postRepo.findAll(page);
+		List<Post> posts = postPage.getContent();
 		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
-		return postDtos;
+		
+		return GeneralUtil.createPagedResponse(postDtos, postPage);
 	}
 
 	@Override
-	public List<PostDto> getPostByUser(Integer userId) {
-		
+	public PagedResponse<PostDto> getPostByUser(Integer userId, int pageNumber, int pageSize) {
+						
 		User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-		List<Post> posts = postRepo.findByUser(user);
+		
+		Pageable pageAble = PageRequest.of(pageNumber, pageSize);		
+		Page<Post> postPage = postRepo.findByUser(user, pageAble);
+		List<Post> posts = postPage.getContent();
 		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
-		return postDtos;
+		
+		return GeneralUtil.createPagedResponse(postDtos, postPage);
 	}
 
 	@Override
-	public List<PostDto> getPostByCategory(Integer categoryId) {
+	public PagedResponse<PostDto> getPostByCategory(Integer categoryId, int pageNumber, int pageSize) {
 		
 		Category cat = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
 		
-		List<Post> posts = postRepo.findByCategory(cat);
-		
+		Pageable page = PageRequest.of(pageNumber, pageSize);		
+		Page<Post> postPage = postRepo.findByCategory(cat, page);
+		List<Post> posts = postPage.getContent();		
 		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
 		
-		
-		return postDtos;
+		return GeneralUtil.createPagedResponse(postDtos, postPage);
 	}
 	
 	@Override

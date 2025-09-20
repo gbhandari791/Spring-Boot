@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.payloads.PostDto;
+import com.blog.payloads.PagedResponse;
 import com.blog.payloads.ResponseDto;
 import com.blog.services.PostService;
 
@@ -51,23 +53,28 @@ public class PostController {
 	}
 	
 	@GetMapping("/user/{userId}/post")
-	public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable Integer userId){
+	public ResponseEntity<PagedResponse<PostDto>> getPostByUser(@PathVariable Integer userId, 
+			@RequestParam(name = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(name = "size", defaultValue = "5") Integer pageSize){
 		
-		List<PostDto> posts = postService.getPostByUser(userId);
+		PagedResponse<PostDto> posts = postService.getPostByUser(userId, pageNumber - 1, pageSize);
 		return ResponseEntity.ok(posts);
 	}
 	
 	@GetMapping("/category/{catId}/post")
-	public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable Integer catId){
+	public ResponseEntity<PagedResponse<PostDto>> getPostByCategory(@PathVariable Integer catId, 
+			@RequestParam(name = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(name = "size", defaultValue = "5") Integer pageSize){
 		
-		List<PostDto> posts = postService.getPostByCategory(catId);
+		PagedResponse<PostDto> posts = postService.getPostByCategory(catId, pageNumber - 1, pageSize);
 		return ResponseEntity.ok(posts);
 	}
 	
 	@GetMapping("/post")
-	public ResponseEntity<List<PostDto>> getAllPosts(){
-		
-		List<PostDto> posts = postService.getAllPosts();
+	public ResponseEntity<PagedResponse<PostDto>> getAllPosts(@RequestParam(name = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(name = "size", defaultValue = "5") Integer pageSize) {
+
+		PagedResponse<PostDto> posts = postService.getAllPosts(pageNumber -1 , pageSize);
 		return ResponseEntity.ok(posts);
 	}
 	
