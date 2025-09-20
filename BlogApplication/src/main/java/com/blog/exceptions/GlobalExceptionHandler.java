@@ -1,5 +1,6 @@
 package com.blog.exceptions;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
 		
 		ResponseDto dto = new ResponseDto("Something went wrong : " + ex.getMessage(), false);		
 		return new ResponseEntity<ResponseDto>(dto, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(CustomException.class)
+	public ResponseEntity<ResponseDto> handleCustomExeption(CustomException ex) {
+		
+		ResponseDto responseDto = new ResponseDto(ex.getMessage(), false);
+		return ResponseEntity.badRequest().body(responseDto);
 	}
 	
 }

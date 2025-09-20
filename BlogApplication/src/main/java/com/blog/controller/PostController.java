@@ -72,9 +72,11 @@ public class PostController {
 	
 	@GetMapping("/post")
 	public ResponseEntity<PagedResponse<PostDto>> getAllPosts(@RequestParam(name = "page", defaultValue = "1") int pageNumber,
-			@RequestParam(name = "size", defaultValue = "5") Integer pageSize) {
+			@RequestParam(name = "size", defaultValue = "5") Integer pageSize,
+			@RequestParam(name = "sortBy", defaultValue = "id") String sortBy, 
+			@RequestParam(name = "sortOrder", defaultValue = "asc") String sortOrder) {
 
-		PagedResponse<PostDto> posts = postService.getAllPosts(pageNumber -1 , pageSize);
+		PagedResponse<PostDto> posts = postService.getAllPosts(pageNumber -1 , pageSize, sortBy, sortOrder);
 		return ResponseEntity.ok(posts);
 	}
 	

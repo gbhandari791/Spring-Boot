@@ -1,6 +1,7 @@
 package com.blog.services.impl;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -8,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Service;
 
 import com.blog.entities.Category;
 import com.blog.entities.Post;
 import com.blog.entities.User;
+import com.blog.exceptions.CustomException;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.mapper.PostMapper;
 import com.blog.payloads.PostDto;
@@ -35,6 +38,8 @@ public class PostServiceImpl implements PostService {
 	private CategoryRepository categoryRepo;
 	@Autowired
 	private PostMapper postMapper;
+	
+	Set<String> ALLOWED_SORTED_FIELDS = Set.of("tital", "createdOn");
 	
 	@Override
 	public PostDto createPost(PostDto dto, Integer userId, Integer categoryId) {
@@ -81,9 +86,15 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PagedResponse<PostDto> getAllPosts(int pageNumber, int pageSize) {
+	public PagedResponse<PostDto> getAllPosts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
 		
-		Pageable page = PageRequest.of(pageNumber, pageSize);
+		if(!ALLOWED_SORTED_FIELDS.contains(sortOrder)) {
+			throw new CustomException("Invalid sort field : " + sortBy);
+		}
+		
+		Sort sort = "desc".equalsIgnoreCase(sortOrder) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+		
+		Pageable page = PageRequest.of(pageNumber, pageSize, sort);
 		Page<Post> postPage = this.postRepo.findAll(page);
 		List<Post> posts = postPage.getContent();
 		List<PostDto> postDtos = posts.stream().map(post -> postMapper.entityToDto(post)).collect(Collectors.toList());
@@ -124,5 +135,6 @@ public class PostServiceImpl implements PostService {
 		postRepo.delete(post);
 		
 	}
-
+	
+	
 }
