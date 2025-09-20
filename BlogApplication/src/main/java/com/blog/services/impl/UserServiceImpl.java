@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
 	public UserDto createUser(UserDto userDto) {
 
 		User user = userMapper.dtoToEntity(userDto);
-		user.setCreatedOn(System.currentTimeMillis());
 		User savedUser = this.userRepo.save(user);
 		
 		return userMapper.entityToDto(savedUser);
@@ -41,7 +40,6 @@ public class UserServiceImpl implements UserService {
 		user.setLastName(userDto.getLastName());
 		user.setEmail(userDto.getEmail());
 		user.setAbout(userDto.getAbout());
-		user.setUpdatedOn(System.currentTimeMillis());
 
 		User uUser = this.userRepo.save(user);
 

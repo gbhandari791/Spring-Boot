@@ -27,8 +27,7 @@ public class UserDto {
 	@StrongPassword
 	private String password;	
 	private String about;	
-	@JsonIgnore
-	private Long createdOn;	
+	private String createdOn;	
 	@JsonIgnore
 	private Long updatedOn;
 }

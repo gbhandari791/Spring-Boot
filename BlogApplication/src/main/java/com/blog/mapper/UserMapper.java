@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.blog.entities.User;
 import com.blog.payloads.UserDto;
+import com.blog.util.DateUtil;
 
 @Component
 public class UserMapper {
@@ -15,7 +16,9 @@ public class UserMapper {
 
 	public UserDto entityToDto(User user) {
 
-		return this.modelMapper.map(user, UserDto.class);
+		 UserDto dto = this.modelMapper.map(user, UserDto.class);
+		 dto.setCreatedOn(DateUtil.formatDate(user.getCreatedOn()));
+		 return dto;
 	}
 
 	public User dtoToEntity(UserDto dto) {

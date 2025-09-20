@@ -1,5 +1,6 @@
 package com.blog.entities;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,11 +35,21 @@ public class Category {
 	private Integer id;
 	private String tital;
 	private String description;
-	@Column(name = "created_on")
-	private long createdOn;
-	@Column(name = "updated_on")
-	private long updatedOn;
+	@Column(name = "created_on", columnDefinition = "TIMESTAMP")
+	private Instant createdOn;
+	@Column(name = "updated_on", columnDefinition = "TIMESTAMP")
+	private Instant updatedOn;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> posts;
+	
+	@PrePersist
+	protected void onCreate() {
+		this.createdOn = Instant.now();
+	}
+	
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedOn = Instant.now();
+	}
 }

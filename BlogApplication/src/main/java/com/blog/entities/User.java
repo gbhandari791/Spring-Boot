@@ -1,5 +1,6 @@
 package com.blog.entities;
 
+import java.time.Instant;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -10,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,11 +44,11 @@ public class User {
 	@Column(name = "about")
 	private String about;
 	
-	@Column(name = "created_on")
-	private Long createdOn;
+	@Column(name = "created_on", columnDefinition = "TIMESTAMP")
+	private Instant createdOn;
 	
-	@Column(name = "updated_on")
-	private Long updatedOn;
+	@Column(name = "updated_on", columnDefinition = "TIMESTAMP")
+	private Instant updatedOn;
 	
 	@Column(name = "is_deleted")
 	private boolean isDeleted;
@@ -56,4 +59,13 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> posts;
 	
+	@PrePersist
+	protected void onCreate() {
+		this.createdOn = Instant.now();
+	}
+	
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedOn = Instant.now();
+	}
 }

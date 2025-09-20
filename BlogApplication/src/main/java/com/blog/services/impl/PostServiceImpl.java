@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private PostMapper postMapper;
 	
-	Set<String> ALLOWED_SORTED_FIELDS = Set.of("id", "tital", "createdOn");
+	Set<String> ALLOWED_SORTED_FIELDS = Set.of("id", "title", "createdOn");
 	
 	@Override
 	public PostDto createPost(PostDto dto, Integer userId, Integer categoryId) {
@@ -54,7 +54,6 @@ public class PostServiceImpl implements PostService {
 		} else {
 			postEntity.setImageName("default.img");
 		}
-		postEntity.setCreatedOn(System.currentTimeMillis());
 		postEntity.setUser(user);
 		postEntity.setCategory(cat);
 		
@@ -67,12 +66,11 @@ public class PostServiceImpl implements PostService {
 	public PostDto updatePost(PostDto dto, Integer postId) {
 		
 		Post post = postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
-		post.setTital(dto.getTital());
+		post.setTitle(dto.getTitle());
 		post.setContent(dto.getContent());
 		if(post.getImageName() != null && !post.getImageName().trim().isEmpty()) {
 			post.setImageName(dto.getImageName());
 		}
-		post.setUpdatedOn(System.currentTimeMillis());
 		
 		Post dbPost = postRepo.save(post);
 		return postMapper.entityToDto(dbPost);
@@ -135,7 +133,7 @@ public class PostServiceImpl implements PostService {
 		
 		Pageable pageAble = getPageable(page);
 		search = search != null ? search.trim() : "";
-		Page<Post> postPage = this.postRepo.findByTitalContainingIgnoreCase(search, pageAble);
+		Page<Post> postPage = this.postRepo.findByTitleContainingIgnoreCase(search, pageAble);
 		List<PostDto> postDtoList = getPostDtoList(postPage.getContent());
 		return GeneralUtil.createPagedResponse(postDtoList, postPage);
 	}

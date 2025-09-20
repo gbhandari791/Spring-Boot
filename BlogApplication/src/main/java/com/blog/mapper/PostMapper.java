@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.blog.entities.Post;
 import com.blog.payloads.PostDto;
+import com.blog.util.DateUtil;
 
 @Component
 public class PostMapper {
@@ -15,7 +16,9 @@ public class PostMapper {
 	
 	public PostDto entityToDto(Post post) {
 		
-		return this.modelMapper.map(post, PostDto.class);
+		PostDto dto = this.modelMapper.map(post, PostDto.class);
+		dto.setCreatedOn(DateUtil.formatDate(post.getCreatedOn()));
+		return dto;
 	}
 	
 	public Post dtoToEntity(PostDto dto) {

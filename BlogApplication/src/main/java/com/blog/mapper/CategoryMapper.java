@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.blog.entities.Category;
 import com.blog.payloads.CategoryDto;
+import com.blog.util.DateUtil;
 
 @Component
 public class CategoryMapper {
@@ -15,7 +16,9 @@ public class CategoryMapper {
 	
 	public CategoryDto entityToDto(Category category) {
 		
-		return this.modelMapper.map(category, CategoryDto.class);
+		CategoryDto dto = this.modelMapper.map(category, CategoryDto.class);
+		dto.setCreatedOn(DateUtil.formatDate(category.getCreatedOn()));
+		return dto;
 	}
 	
 	public Category dtoToEntity(CategoryDto dto) {

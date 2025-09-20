@@ -16,8 +16,7 @@ public class CategoryDto {
 	@NotBlank(message = "Tital is required")
 	private String tital;
 	private String description;
+	private String createdOn;
 	@JsonIgnore
-	private long createdOn;
-	@JsonIgnore
-	private long updatedOn;
+	private String updatedOn;
 }
