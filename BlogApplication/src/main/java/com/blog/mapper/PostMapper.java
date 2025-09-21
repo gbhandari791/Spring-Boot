@@ -6,10 +6,14 @@ import org.springframework.stereotype.Component;
 
 import com.blog.entities.Post;
 import com.blog.payloads.PostDto;
+import com.blog.services.FileUploadService;
 import com.blog.util.DateUtil;
 
 @Component
 public class PostMapper {
+	
+	@Autowired
+	private FileUploadService uploadService;
 
 	@Autowired
 	private ModelMapper modelMapper;
@@ -18,6 +22,7 @@ public class PostMapper {
 		
 		PostDto dto = this.modelMapper.map(post, PostDto.class);
 		dto.setCreatedOn(DateUtil.formatDate(post.getCreatedOn()));
+		dto.setImage(uploadService.getImageUrl(post.getImageName()));
 		return dto;
 	}
 	

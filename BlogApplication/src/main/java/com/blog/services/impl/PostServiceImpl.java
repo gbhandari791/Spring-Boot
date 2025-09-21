@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.entities.Category;
 import com.blog.entities.Post;
@@ -24,6 +25,7 @@ import com.blog.payloads.PagedResponse;
 import com.blog.repositories.CategoryRepository;
 import com.blog.repositories.PostRepository;
 import com.blog.repositories.UserRepository;
+import com.blog.services.FileUploadService;
 import com.blog.services.PostService;
 import com.blog.util.GeneralUtil;
 
@@ -38,6 +40,8 @@ public class PostServiceImpl implements PostService {
 	private CategoryRepository categoryRepo;
 	@Autowired
 	private PostMapper postMapper;
+	@Autowired
+	private FileUploadService uploadService;
 	
 	Set<String> ALLOWED_SORTED_FIELDS = Set.of("id", "title", "createdOn");
 	
@@ -49,10 +53,8 @@ public class PostServiceImpl implements PostService {
 		Category cat = categoryRepo.findById(categoryId).orElseThrow( () -> new ResourceNotFoundException("Category", "Id", categoryId));
 		
 		Post postEntity = postMapper.dtoToEntity(dto);
-		if(dto.getImageName() != null && !dto.getImageName().trim().isEmpty()) {
-			postEntity.setImageName(dto.getImageName());
-		} else {
-			postEntity.setImageName("default.img");
+		if(dto.getImage() != null && !dto.getImage().trim().isEmpty()) {
+			postEntity.setImageName(dto.getImage());
 		}
 		postEntity.setUser(user);
 		postEntity.setCategory(cat);
@@ -69,7 +71,7 @@ public class PostServiceImpl implements PostService {
 		post.setTitle(dto.getTitle());
 		post.setContent(dto.getContent());
 		if(post.getImageName() != null && !post.getImageName().trim().isEmpty()) {
-			post.setImageName(dto.getImageName());
+			post.setImageName(dto.getImage());
 		}
 		
 		Post dbPost = postRepo.save(post);
@@ -153,6 +155,21 @@ public class PostServiceImpl implements PostService {
 	private List<PostDto> getPostDtoList(List<Post> posts){
 		
 		return posts.stream().map(post -> this.postMapper.entityToDto(post)).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean uploadPostImage(Integer postId, MultipartFile file) {
+	
+		Post post = this.postRepo.findById(postId).orElseThrow( () -> new ResourceNotFoundException("Post", "Id", postId));
+		
+		String fileName = uploadService.uploadImage(file);
+		if(fileName != null) {
+			post.setImageName(fileName);
+			postRepo.save(post);
+			return true;
+		}
+		
+		return false;
 	}
 	
 }

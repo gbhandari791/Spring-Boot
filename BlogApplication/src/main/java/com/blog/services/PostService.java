@@ -2,6 +2,8 @@ package com.blog.services;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.blog.payloads.PostDto;
 import com.blog.payloads.PageDto;
 import com.blog.payloads.PagedResponse;
@@ -23,4 +25,6 @@ public interface PostService {
 	PagedResponse<PostDto> getPostByCategory(Integer categoryId, PageDto page);
 	
 	PagedResponse<PostDto> searchByTital(String search, PageDto page);
+	
+	boolean uploadPostImage(Integer postId, MultipartFile file);
 }

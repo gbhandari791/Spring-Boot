@@ -1,6 +1,8 @@
 package com.blog.payloads;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -16,10 +18,11 @@ public class PostDto {
 	@NotBlank(message = "Tital is required")
 	private String title;
 	private String content;
-	private String imageName;
+	@JsonInclude(Include.NON_EMPTY)
+	private String image;
 	private String createdOn;
 	@JsonIgnore
-	private long updatedOn;
+	private String updatedOn;
 	
 	private UserDto user;
 	

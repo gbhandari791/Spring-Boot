@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.payloads.PostDto;
 import com.blog.payloads.PageDto;
@@ -85,5 +87,23 @@ public class PostController {
 		
 		postService.deletePost(postId);
 		return ResponseEntity.ok(new ResponseDto("Post deleted successfully", true));
+	}
+	
+	@PutMapping("/post/{postId}/image/upload")
+	public ResponseEntity<ResponseDto> uploadPostImage(@PathVariable int postId, @RequestParam(name = "image", required = true) MultipartFile file){
+		
+		boolean imageUploaded = this.postService.uploadPostImage(postId, file);
+		ResponseDto response = new ResponseDto();
+		ResponseEntity<ResponseDto> entity = null;
+		if(imageUploaded) {
+			response.setMessage("Image uploaded successfully");
+			response.setSuccess(true);
+			entity = ResponseEntity.ok(response);
+		} else {
+			response.setMessage("Something went wrong: Falied to upload the image");
+			response.setSuccess(false);
+			entity = ResponseEntity.internalServerError().body(response);
+		}
+		return entity;
 	}
 }
