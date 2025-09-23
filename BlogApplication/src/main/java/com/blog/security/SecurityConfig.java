@@ -18,9 +18,9 @@ import com.blog.services.impl.UserServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+	
 	@Bean
-	UserDetailsServiceImpl detailsServiceImpl(){
+	UserDetailsServiceImpl userDetailsServiceImpl() {
 		
 		return new UserDetailsServiceImpl();
 	}
@@ -34,10 +34,9 @@ public class SecurityConfig {
 	@Bean
 	DaoAuthenticationProvider authenticationProvider() {
 		
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(this.detailsServiceImpl());
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(this.userDetailsServiceImpl());
 		daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
 		return daoAuthenticationProvider;
-		
 	}
 	
 	@Bean
@@ -51,13 +50,14 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
 		http
-			.csrf( csrf -> csrf.disable())
+			.csrf( csrf -> csrf.disable() )   
 			.authorizeHttpRequests( auth ->
-					auth.requestMatchers(HttpMethod.POST, "/api/user/").permitAll()
-					.anyRequest().authenticated()
+			    auth.requestMatchers(HttpMethod.POST, "/api/user/").permitAll()
+				.anyRequest().authenticated()
 			)
 			.httpBasic(Customizer.withDefaults());
 		
 		return http.build();
 	}
+	
 }
