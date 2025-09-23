@@ -2,6 +2,7 @@ package com.blog.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.blog.entities.User;
@@ -13,6 +14,8 @@ public class UserMapper {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public UserDto entityToDto(User user) {
 
@@ -23,6 +26,8 @@ public class UserMapper {
 
 	public User dtoToEntity(UserDto dto) {
 
-		return this.modelMapper.map(dto, User.class);
+		User user = this.modelMapper.map(dto, User.class);
+		user.setPassword(this.encoder.encode(user.getPassword()));
+		return user;
 	}
 }

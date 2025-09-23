@@ -1,0 +1,63 @@
+package com.blog.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+import com.blog.services.impl.UserServiceImpl;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+	@Bean
+	UserDetailsServiceImpl detailsServiceImpl(){
+		
+		return new UserDetailsServiceImpl();
+	}
+	
+	@Bean
+	BCryptPasswordEncoder passwordEncoder() {
+		
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	DaoAuthenticationProvider authenticationProvider() {
+		
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(this.detailsServiceImpl());
+		daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
+		return daoAuthenticationProvider;
+		
+	}
+	
+	@Bean
+	AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+		
+		return http.getSharedObject(AuthenticationManagerBuilder.class)
+			.authenticationProvider(this.authenticationProvider()).build();
+	}
+	
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		
+		http
+			.csrf( csrf -> csrf.disable())
+			.authorizeHttpRequests( auth ->
+					auth.requestMatchers(HttpMethod.POST, "/api/user/").permitAll()
+					.anyRequest().authenticated()
+			)
+			.httpBasic(Customizer.withDefaults());
+		
+		return http.build();
+	}
+}

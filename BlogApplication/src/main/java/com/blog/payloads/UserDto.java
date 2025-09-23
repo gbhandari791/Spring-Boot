@@ -29,5 +29,5 @@ public class UserDto {
 	private String about;	
 	private String createdOn;	
 	@JsonIgnore
-	private Long updatedOn;
+	private String updatedOn;
 }
