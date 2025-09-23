@@ -1,6 +1,5 @@
 package com.blog.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,8 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.blog.services.impl.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -34,9 +31,9 @@ public class SecurityConfig {
 	@Bean
 	DaoAuthenticationProvider authenticationProvider() {
 		
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(this.userDetailsServiceImpl());
-		daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
-		return daoAuthenticationProvider;
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(this.userDetailsServiceImpl());
+		authenticationProvider.setPasswordEncoder(this.passwordEncoder());
+		return authenticationProvider;
 	}
 	
 	@Bean
@@ -50,14 +47,14 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
 		http
-			.csrf( csrf -> csrf.disable() )   
+			.csrf( csrf -> csrf.disable() )
 			.authorizeHttpRequests( auth ->
-			    auth.requestMatchers(HttpMethod.POST, "/api/user/").permitAll()
-				.anyRequest().authenticated()
+			
+					auth.requestMatchers(HttpMethod.POST, "/api/user/").permitAll()
+					.anyRequest().authenticated()
 			)
 			.httpBasic(Customizer.withDefaults());
-		
-		return http.build();
+			
+			return http.build();
 	}
-	
 }
