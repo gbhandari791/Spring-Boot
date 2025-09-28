@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="base :: layout(~{:: #loginContenet})">
+<head>
+<meta charset="ISO-8859-1">
+<title>Login Page</title>
+</head>
+<body>
+
+	<section id="loginContenet">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 offset-md-3 mt-5">
+					<div id="login-card">
+
+						<div class="d-flex justify-content-center">
+							<img alt="img" th:src="@{img/customer-service.png}" width="80">
+						</div>
+						<h1 class="text-center mb-3">Login !!</h1>
+
+						<div th:if="${param.error}" class="alert alert-danger">
+							Invalid usernamr and password</div>
+
+						<div th:if="${param.logout}" class="alert alert-success">
+							You have been logged out</div>
+
+						<form th:action="@{/processLogin}" method="post">
+
+							<div class="form-group">
+								<label for="id-email" class="font-weight-bold">Username:</label>
+								<input type="email" name="username" class="form-control">
+							</div>
+
+							<div class="form-group">
+								<label for="id-password" class="font-weight-bold">Password:</label>
+								<input type="password" name="password" class="form-control">
+							</div>
+
+							<div class="container text-center mt-5">
+								<button type="submit" class="btn smart-bg-primary text-white">Submit</button>
+							</div>
+
+							<div class="text-center mt-3">
+								<p>
+									Not a member? <a th:href="@{/signup}">Register</a>
+								</p>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<form th:action="@{/processLogin}" method="post">
+		<div class="form-group">
+			<label>Username:</label> <input type="email" name="username"
+				class="form-control">
+		</div>
+
+		<div class="form-group">
+			<label>Password:</label> <input type="password" name="password"
+				class="form-control">
+		</div>
+
+		<button type="submit" class="btn smart-bg-primary text-white">Submit</button>
+	</form>
+
+</body>
+</html>
