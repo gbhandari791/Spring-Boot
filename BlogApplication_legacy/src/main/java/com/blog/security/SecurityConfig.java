@@ -8,16 +8,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 	@Bean
@@ -34,6 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	JwtAuthenticationEntryPoint entryPoint() {
 		
 		return new JwtAuthenticationEntryPoint();
+	}
+	
+	@Bean
+	AccessDeniedHandler accessDeniedHandler() {
+		
+		return new JwtAccessDeniedHandler();
 	}
 	
 	@Bean
@@ -65,9 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf().disable()
 			.authorizeHttpRequests()
 				.antMatchers("/api/v1/auth/**").permitAll()
+				// .antMatchers(HttpMethod.GET ,"/api/user/").hasRole("ADMIN")
 				.anyRequest().authenticated()
 			.and()
 			.exceptionHandling().authenticationEntryPoint(this.entryPoint())
+			.and().exceptionHandling().accessDeniedHandler(this.accessDeniedHandler())
 			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().addFilterBefore(this.authenticationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -59,6 +60,14 @@ public class GlobalExceptionHandler {
 		
 		ResponseDto responseDto = new ResponseDto("Invalid username or password", false);
 		return 	new ResponseEntity<ResponseDto>(responseDto, HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ResponseDto> handelBadCredentialsException(AccessDeniedException ex){
+		
+		ResponseDto responseDto = new ResponseDto("Access Denied", false);
+		return 	new ResponseEntity<ResponseDto>(responseDto, HttpStatus.FORBIDDEN);
 		
 	}
 	
