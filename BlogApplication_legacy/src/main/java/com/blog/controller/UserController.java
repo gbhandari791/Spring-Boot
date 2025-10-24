@@ -28,13 +28,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@PostMapping("/")
-	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
-		
-		UserDto createdUser = this.userService.createUser(userDto);
-		
-		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-	}
+//	@PostMapping("/")
+//	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
+//		
+//		UserDto createdUser = this.userService.createUser(userDto);
+//		
+//		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+//	}
 	
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable("userId") Integer userId){
