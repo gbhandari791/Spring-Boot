@@ -16,6 +16,7 @@ import lombok.Setter;
 @Setter
 public class UserDto {
 
+	@JsonProperty(access = Access.READ_ONLY)
 	private int id;	
 	@NotBlank(message = "First name is required")
 	private String firstName;	
@@ -27,6 +28,7 @@ public class UserDto {
 	@StrongPassword
 	private String password;	
 	private String about;	
+	@JsonProperty(access = Access.READ_ONLY)
 	private String createdOn;	
 	@JsonIgnore
 	private String updatedOn;
